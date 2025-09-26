@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.jetBrains.kotlin.multiplatform)
     alias(libs.plugins.jetBrains.kotlin.plugin.compose)
     alias(libs.plugins.vanniktech.maven.publish)
+    alias(libs.plugins.dokka)
 }
 
 kotlin {
@@ -49,5 +50,24 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+tasks.withType<org.jetbrains.dokka.gradle.DokkaTask>().configureEach {
+    dokkaSourceSets {
+        configureEach {
+            moduleName.set("KMP Maps")
+            includes.from("Module.md")
+            
+            // Link to external documentation
+            externalDocumentationLink {
+                url.set(uri("https://developer.android.com/reference/").toURL())
+                packageListUrl.set(uri("https://developer.android.com/reference/androidx/package-list").toURL())
+            }
+            
+            externalDocumentationLink {
+                url.set(uri("https://kotlinlang.org/api/kotlinx.coroutines/").toURL())
+            }
+        }
     }
 }
